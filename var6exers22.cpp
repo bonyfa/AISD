@@ -19,7 +19,7 @@ struct Point {
 		return os;
 	}
 	bool& operator==(const Point<T>& other) {
-		if (abs(this->x - other.x) < e and abs(this->y == other.y)<e)
+		if (abs(this->x - other.x) < e and abs(this->y == other.y) < e)
 			return true;
 		else
 			return false;
@@ -64,95 +64,7 @@ public:
 		delete[] points;
 	}
 
-	void add(const Point<T>& point) {
-		Point<T>* newElements = new Point<T>[size + 1];
-		for (int i = 0; i < size; ++i) {
-			newElements[i] = points[i];
-		}
-		newElements[size] = point;
-		delete[] points;
-		points = newElements;
-		size += 1;
-	}
-
-	Point<T> operator[](const int& index) {
-		if (index < 0 || index >= size) {
-			throw out_of_range("Index out of range");
-		}
-		return points[index];
-	}
-	Polyline<T>& operator+(const Polyline<T>& other) {
-		int newSize = size + other.size;
-		Point<T>* newPoints = new Point<T>[newSize];
-		for (int i = 0; i < size; i++) {
-			newPoints[i] = points[i];
-		}
-		for (int i = 0; i < other.size; i++) {
-			newPoints[size + i] = other.points[i];
-		}
-		delete[] points;
-		points = newPoints;
-		size = newSize;
-		return *this;
-	}
-	//оператор добавляет точку в начало массива
-	Polyline<T>& operator+(const Point<T>& point) {
-		Point<T>* newPoints = new Point<T>[size + 1];
-		newPoints[0] = point;
-		for (int i = 0; i < size; i++) {
-			newPoints[i + 1] = points[i];
-		}
-		delete[] points;
-		points = newPoints;
-		size++;
-		return *this;
-	}
-	//оператор добавляет точку в конец массива
-	Polyline<T>& operator-(const Point<T>& point) {
-		Point<T>* newPoints = new Point<T>[size + 1];
-		for (int i = 0; i < size; i++) {
-			newPoints[i] = points[i];
-		}
-		newPoints[size] = point;
-		delete[] points;
-		points = newPoints;
-		size++;
-		return *this;
-	}
-
-	double length() const {
-		double totalLength = 0.0;
-		for (int i = 0; i < size - 1; i++) {
-			// Расстояние между точками i и i+1
-			T dx = points[i + 1].x - points[i].x;
-			T dy = points[i + 1].y - points[i].y;
-
-			double segmentLength;
-			segmentLength = sqrt(static_cast<double>(dx * dx + dy * dy));
-			totalLength += segmentLength;
-		}
-		return totalLength;
-	}
-
-	friend ostream& operator<<(ostream& os, const Polyline<T>& polyline) {
-		for (int i = 0; i < polyline.size; i++) {
-			os << "(" << polyline.points[i].x << ", " << polyline.points[i].y << ") ";
-		}
-		return os;
-	}
-	bool& operator==(const Polyline<T>& other) {
-		int k = 0;
-		if (this->size != other->size)
-			throw out_of_range("size must be ==");
-		for (int i = 0; i < size; ++i) {
-			if (this->points[i] == other->points[i])
-				k++;
-		}
-		if (k == size)
-			return true;
-		else
-			return false;
-	}
+	
 };
 template<typename T>
 struct Point<complex<T>> {
@@ -165,7 +77,7 @@ struct Point<complex<T>> {
 		return os;
 	}
 	bool& operator==(const Point<complex<T>>& other) {
-		if ((abs(this->x.real() - other.x.real())<e) and (abs(this->y.real()) - (other.y.real)) < e and (abs(this->x.imgl() - other.x.img()) < e) and  (abs(this->y.img()) - (other.y.img())))
+		if ((abs(this->x.real() - other.x.real()) < e) and (abs(this->y.real()) - (other.y.real)) < e and (abs(this->x.imgl() - other.x.img()) < e) and (abs(this->y.img()) - (other.y.img())))
 			return true;
 		else
 			return false;
@@ -213,6 +125,7 @@ public:
 	}
 
 	
+
 };
 
 int main() {
@@ -233,6 +146,13 @@ int main() {
 	Polyline<int> polyline_copy(polyline_with_values);
 	cout << "polyline_copy: " << endl;
 	cout << polyline_copy << endl;
+
+	
+	cout << "\n----------------------------------------------------" << endl;
+
+	Point<complex<float>> complex_point1(complex<float>(1, 2), complex<float>(3, 4));
+	cout << "complex_point1: " << endl;
+	cout << complex_point1 << endl;
 
 	
 }
