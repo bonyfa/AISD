@@ -64,7 +64,25 @@ public:
 		delete[] points;
 	}
 
-	
+	friend ostream& operator<<(ostream& os, const Polyline<T>& polyline) {
+		for (int i = 0; i < polyline.size; i++) {
+			os << "(" << polyline.points[i].x << ", " << polyline.points[i].y << ") ";
+		}
+		return os;
+	}
+	bool& operator==(const Polyline<T>& other) {
+		int k = 0;
+		if (this->size != other->size)
+			throw out_of_range("size must be ==");
+		for (int i = 0; i < size; ++i) {
+			if (this->points[i] == other->points[i])
+				k++;
+		}
+		if (k == size)
+			return true;
+		else
+			return false;
+	}
 };
 template<typename T>
 struct Point<complex<T>> {
@@ -124,7 +142,24 @@ public:
 		delete[] points;
 	}
 
-	
+	void add(const Point<complex<T>>& point) {
+		Point<complex<T>>* newElements = new Point<complex<T>>[size + 1];
+		for (int i = 0; i < size; ++i) {
+			newElements[i] = points[i];
+		}
+		newElements[size] = point;
+		delete[] points;
+		points = newElements;
+		size += 1;
+	}
+
+
+	friend ostream& operator<<(ostream& os, const Polyline<complex<T>>& polyline) {
+		for (int i = 0; i < polyline.size; i++) {
+			os << "(" << polyline.points[i].x << ",  " << polyline.points[i].y << ") ";
+		}
+		return os;
+	}
 
 };
 
@@ -154,5 +189,17 @@ int main() {
 	cout << "complex_point1: " << endl;
 	cout << complex_point1 << endl;
 
-	
+	Polyline<complex<float>> polyline_with_complex_values(2, complex<float>(-3, -4), complex<float>(1, 1));
+	cout << "polyline_with_complex_values: " << endl;
+	cout << polyline_with_complex_values << endl;
+
+	Polyline<complex<float>> polyline_copy_complex(polyline_with_complex_values);
+	cout << "polyline_copy_complex: " << endl;
+	cout << polyline_copy_complex << endl;
+
+	Point<complex<float>> complex_point2(complex<float>(1, 2), complex<float>(3, 4));
+	polyline_copy_complex.add(complex_point2);
+	cout << "polyline_add_complex_point: " << endl;
+	cout << polyline_copy_complex << endl;
+
 }
