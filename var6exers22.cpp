@@ -120,7 +120,19 @@ public:
 		return *this;
 	}
 
+	double length() const {
+		double totalLength = 0.0;
+		for (int i = 0; i < size - 1; i++) {
+			// Расстояние между точками i и i+1
+			T dx = points[i + 1].x - points[i].x;
+			T dy = points[i + 1].y - points[i].y;
 
+			double segmentLength;
+			segmentLength = sqrt(static_cast<double>(dx * dx + dy * dy));
+			totalLength += segmentLength;
+		}
+		return totalLength;
+	}
 
 	friend ostream& operator<<(ostream& os, const Polyline<T>& polyline) {
 		for (int i = 0; i < polyline.size; i++) {
@@ -258,6 +270,20 @@ public:
 		return *this;
 	}
 
+	double length() const {
+		double totalLength = 0.0;
+		for (int i = 0; i < size - 1; i++) {
+			// Расстояние между точками i и i+1
+			complex<T> dx = points[i + 1].x - points[i].x;
+			complex<T> dy = points[i + 1].y - points[i].y;
+
+			double segmentLength;
+
+			segmentLength = abs(dx) + abs(dy);
+			totalLength += segmentLength;
+		}
+		return totalLength;
+	}
 
 	friend ostream& operator<<(ostream& os, const Polyline<complex<T>>& polyline) {
 		for (int i = 0; i < polyline.size; i++) {
@@ -281,7 +307,30 @@ public:
 	}
 
 };
+template<typename T>
+void createRectangularTrapezoid(int a, int b, int h, Point<T>* points) {
+	points[0].x = 0;
+	points[0].y = 0;
+	points[1].x = 0;
+	points[1].y = h;
+	points[2].x = b;
+	points[2].y = h;
+	points[3].x = a;
+	points[3].y = 0;
 
+}
+
+template<typename T>
+void createRectangularTrapezoid(complex<T>& a, complex<T>& b, complex<T>& h, Point<complex<T>>* points) {
+	points[0].x = 0;
+	points[0].y = 0;
+	points[1].x = 0;
+	points[1].y = h;
+	points[2].x = b;
+	points[2].y = h;
+	points[3].x = a;
+	points[3].y = 0;
+}
 int main() {
 
 	Polyline<int> polyline_int;
@@ -322,6 +371,17 @@ int main() {
 	cout << "polyline_point: " << endl;
 	cout << polyline_point << endl;
 
+	double combined_polyline_poly_length = combined_polyline.length();
+	cout << "combined_polyline_poly_length: " << endl;
+	cout << combined_polyline_poly_length << endl;
+
+	//Создание правильного многоугольника
+	Point<int>* points = new Point<int>[4];
+	createRectangularTrapezoid(3, 2, 4, points);
+	cout << "Coordinates of the Rectangular Trapezoid: " << endl;
+	for (int i = 0; i < 4; i++) {
+		cout << points[i] << " ";
+	}
 	cout << "\n----------------------------------------------------" << endl;
 
 	Point<complex<float>> complex_point1(complex<float>(1, 2), complex<float>(3, 4));
@@ -356,5 +416,16 @@ int main() {
 	cout << "polyline_point_complex: " << endl;
 	cout << polyline_point_complex << endl;
 
+	double combined_polyline_complex_poly_length = polyline_point_complex.length();
+	cout << "combined_polyline_complex_poly_length: " << endl;
+	cout << combined_polyline_complex_poly_length << endl;
 
+	//// Создание правильного многоугольника c комплексными
+	Point<complex<float>>* complex_points = new Point<complex<float>>[4];
+	createRectangularTrapezoid(3, 2, 4, complex_points);
+	cout << "Coordinates of the Rectangular Trapezoid for complex: " << endl;
+	for (int i = 0; i < 4; i++) {
+		cout << complex_points[i] << " ";
+	}
+	return 0;
 }
